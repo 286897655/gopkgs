@@ -1,5 +1,12 @@
 package viid
 
+import (
+	"database/sql/driver"
+	"errors"
+	"gopkgs/pkg/utils"
+	"time"
+)
+
 // 视频图像信息类型
 type InfoType = int
 
@@ -66,3 +73,43 @@ const (
 	VIIO_Face      = "face"
 	VIIO_ImageInfo = "iamgeinfo"
 )
+
+// viid时间格式
+type VIIDTime time.Time
+
+const (
+	VIIDDateTimeFmt string = `"` + "20060102150405" + `"`
+)
+
+func (viidTime *VIIDTime) MarshalJSON() ([]byte, error) {
+	return []byte(time.Time(*viidTime).Format(VIIDDateTimeFmt)), nil
+}
+
+func (viidTime *VIIDTime) UnmarshalJSON(data []byte) error {
+	// Ignore null and empty value, like in the main JSON package.
+	if string(data) == "null" || utils.StringIsNullOrEmpty(string(data)) {
+		return nil
+	}
+
+	// Fractional seconds are handled implicitly by Parse.
+	tt, err := time.Parse(VIIDDateTimeFmt, string(data))
+	*viidTime = VIIDTime(tt)
+	return err
+}
+
+// 实现 sql.Scanner 接口，Scan 将 value 扫描至 VIIDTime
+func (viidTime *VIIDTime) Scan(value interface{}) error {
+	time, ok := value.(time.Time)
+	if !ok {
+		return errors.New("not Time type")
+	}
+
+	*viidTime = VIIDTime(time)
+
+	return nil
+}
+
+// 实现 driver.Valuer 接口，Value 返回 json value
+func (viidTime VIIDTime) Value() (driver.Value, error) {
+	return time.Time(viidTime), nil
+}
