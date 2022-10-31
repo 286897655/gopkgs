@@ -1,6 +1,8 @@
 package utils
 
-import "strings"
+import (
+	"strings"
+)
 
 func StringIsNullOrEmpty(str string) bool {
 	return 0 == len(strings.TrimSpace(str))

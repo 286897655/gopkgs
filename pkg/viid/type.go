@@ -92,7 +92,7 @@ func (viidTime *VIIDTime) UnmarshalJSON(data []byte) error {
 	}
 
 	// Fractional seconds are handled implicitly by Parse.
-	tt, err := time.Parse(VIIDDateTimeFmt, string(data))
+	tt, err := time.ParseInLocation(VIIDDateTimeFmt, string(data), time.Local)
 	*viidTime = VIIDTime(tt)
 	return err
 }
