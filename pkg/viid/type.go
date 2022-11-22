@@ -69,9 +69,10 @@ type DataSourceType = string
 
 // 视频图像信息对象 video and image information object
 const (
-	VIIO_Person    = "person"
-	VIIO_Face      = "face"
-	VIIO_ImageInfo = "iamgeinfo"
+	VIIO_Person       = "person"
+	VIIO_Face         = "face"
+	VIIO_ImageInfo    = "iamgeinfo"
+	VIIO_MotorVehicle = "motorvehicle"
 )
 
 // viid时间格式
