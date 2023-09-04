@@ -3,10 +3,20 @@ package httptool
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 )
+
+func SimplePost(url string,buffer []byte)([]byte,error){
+	resp, err := http.Post(url, "application/json", bytes.NewReader(buffer))
+	if err != nil{
+		return nil,err
+	}
+
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
+}
 
 func JsonPost(postUrl string, para interface{}) ([]byte, error) {
 	bs, err := json.Marshal(para)
@@ -41,5 +51,7 @@ func JsonPost(postUrl string, para interface{}) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	return ioutil.ReadAll(resp.Body)
+	return io.ReadAll(resp.Body)
 }
+
+func 
