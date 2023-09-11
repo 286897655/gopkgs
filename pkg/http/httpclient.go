@@ -8,10 +8,10 @@ import (
 	"time"
 )
 
-func SimplePost(url string,buffer []byte)([]byte,error){
+func SimplePost(url string, buffer []byte) ([]byte, error) {
 	resp, err := http.Post(url, "application/json", bytes.NewReader(buffer))
-	if err != nil{
-		return nil,err
+	if err != nil {
+		return nil, err
 	}
 
 	defer resp.Body.Close()
@@ -53,5 +53,3 @@ func JsonPost(postUrl string, para interface{}) ([]byte, error) {
 
 	return io.ReadAll(resp.Body)
 }
-
-func 
