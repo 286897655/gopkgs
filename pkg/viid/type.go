@@ -3,8 +3,9 @@ package viid
 import (
 	"database/sql/driver"
 	"errors"
-	"gopkgs/pkg/utils"
 	"time"
+
+	utils "github.com/286897655/gopkgs/pkg/utils"
 )
 
 // 视频图像信息类型
