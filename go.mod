@@ -1,3 +1,3 @@
 module github.com/286897655/gopkgs
 
-go 1.17
+go 1.20
