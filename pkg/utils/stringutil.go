@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"strings"
 )
 
@@ -20,4 +22,13 @@ func StringsHasNullOrEmpty(args ...string) bool {
 
 func StringsEqual(str1, str2 string) bool {
 	return str1 == str2
+}
+
+func RandomString(length int) string {
+	bytes := make([]byte, length)
+	_, err := rand.Read(bytes)
+	if err != nil {
+		panic(err)
+	}
+	return base64.StdEncoding.EncodeToString(bytes)
 }

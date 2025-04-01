@@ -36,6 +36,7 @@ type RtpPacket struct {
 }
 
 const (
+	RTP_HEADER_SIZE         = 12
 	headerLength            = 4
 	versionShift            = 6
 	versionMask             = 0x03
