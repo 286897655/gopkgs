@@ -8,6 +8,16 @@ import (
 	"time"
 )
 
+func SimpleGet(url string) ([]byte, error) {
+	client := &http.Client{Timeout: time.Second * 3}
+	resp, err := client.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return io.ReadAll(resp.Body)
+}
+
 func SimplePost(url string, buffer []byte) ([]byte, error) {
 	resp, err := http.Post(url, "application/json", bytes.NewReader(buffer))
 	if err != nil {
