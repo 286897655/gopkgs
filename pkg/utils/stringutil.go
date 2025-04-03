@@ -30,5 +30,5 @@ func RandomString(length int) string {
 	if err != nil {
 		panic(err)
 	}
-	return base64.StdEncoding.EncodeToString(bytes)
+	return base64.URLEncoding.EncodeToString(bytes)
 }
