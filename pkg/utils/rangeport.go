@@ -33,6 +33,12 @@ func (range_port *RangePort) FreeTcpPort(port int) {
 	}
 }
 
+func (range_port *RangePort) FreeUdpPort(port int) {
+	if port >= range_port.port_min && port <= range_port.port_max {
+		range_port.udp_ports.Store(port, 0)
+	}
+}
+
 func (range_port *RangePort) SelectTcpPort() (int, error) {
 	select_port := 0
 	range_port.tcp_ports.Range(func(key, value any) bool {
@@ -59,6 +65,28 @@ func (range_port *RangePort) SelectTcpPort() (int, error) {
 	return select_port, nil
 }
 
-func (range_port *RangePort) SelectUdpPort() {
-
+func (range_port *RangePort) SelectUdpPort() (int, error) {
+	select_port := 0
+	range_port.udp_ports.Range(func(key, value any) bool {
+		port := key.(int)
+		used := value.(int)
+		if used > 0 { //if used this port continue
+			return true
+		}
+		listener, err := net.ListenUDP("udp", &net.UDPAddr{
+			Port: port,
+		})
+		if err != nil {
+			// listen fail,port was used select netx
+			return false
+		}
+		defer listener.Close()
+		select_port = port
+		return true
+	})
+	if select_port == 0 {
+		return 0, errors.New("can't select unused port")
+	}
+	range_port.udp_ports.Store(select_port, 1)
+	return select_port, nil
 }
